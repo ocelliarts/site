@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ocelli — AI-Driven Creative Agency, Kolkata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F9F9F7;
+  --bg-s:#F0F0EE;
+  --bg-d:#F0F0EE;
+  --ink:#1A1A1A;
+  --ink-2:#1A1A1A;
+  --muted:#9A9A9A;
+  --dark:#0B1C1A;
+  --red:#C13B2A;
+  --blue:#5C9DC8;
+  --rule:rgba(11,28,26,0.09);
+  --rule-med:rgba(11,28,26,0.15);
+  --accent:#C13B2A;
+  --glass:rgba(249,249,247,0.80);
+  --shadow-s:0 2px 16px rgba(11,28,26,0.10);
+  --shadow-m:0 8px 32px rgba(11,28,26,0.14);
+  --ease:cubic-bezier(0,0,0.2,1);
+  --font:'Inter',sans-serif;
+  --font-body:'DM Sans',sans-serif;
+}
+html{scroll-behavior:smooth;overflow-x:hidden}
+body{
+  font-family:var(--font-body);background:var(--bg);color:var(--ink);
+  overflow-x:hidden;line-height:1.6;
+}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--muted)}
+
+/* CURSOR */
+.cur{position:fixed;width:6px;height:6px;background:var(--ink);border-radius:50%;pointer-events:none;z-index:9999;transition:transform .08s}
+.cur-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(27,26,21,0.2);border-radius:50%;pointer-events:none;z-index:9998;transition:width .25s var(--ease),height .25s var(--ease),border-color .3s}
+.cur-ring.x{width:58px;height:58px;border-color:var(--accent)}
+
+/* NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 clamp(1.5rem,5vw,5rem);height:64px;
+  background:rgba(249,249,247,0.92);
+  backdrop-filter:blur(24px) saturate(1.5);
+  -webkit-backdrop-filter:blur(24px) saturate(1.5);
+  border-bottom:1px solid var(--rule);
+  transition:box-shadow .4s;
+}
+nav.scrolled{box-shadow:var(--shadow-s)}
+.logo{font-family:var(--font);font-size:1rem;font-weight:700;letter-spacing:.32em;color:var(--dark);text-transform:uppercase}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:var(--font);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .25s}
+.nav-links a:hover{color:var(--dark)}
+.nav-cta{
+  font-family:var(--font);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;
+  padding:.5rem 1.4rem;border:none;border-radius:4px;
+  color:#fff;background:var(--red);cursor:pointer;
+  transition:background .15s cubic-bezier(0,0,0.2,1);
+}
+.nav-cta:hover{background:#a8311f}
+.burger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.burger span{width:22px;height:1px;background:var(--ink);display:block;transition:all .3s}
+
+/* HERO */
+#hero{
+  position:relative;min-height:100svh;
+  display:flex;align-items:center;
+  padding:clamp(7rem,11vw,9rem) clamp(1.5rem,5vw,5rem) clamp(4rem,6vw,6rem);
+  overflow:hidden;background:var(--dark);color:#fff;
+}
+canvas#nc{position:absolute;inset:0;width:100%;height:100%;opacity:.07}
+.h-rule-l{position:absolute;top:0;left:clamp(1.5rem,5vw,5rem);width:1px;height:100%;background:rgba(249,249,247,0.08)}
+.h-rule-r{position:absolute;top:0;right:clamp(1.5rem,5vw,5rem);width:1px;height:100%;background:rgba(249,249,247,0.08)}
+.hero-body{position:relative;z-index:2;max-width:860px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:1rem;
+  font-family:var(--font);font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(249,249,247,0.5);
+  margin-bottom:2.5rem;
+  opacity:0;animation:up .9s var(--ease) .2s forwards;
+}
+.eyebrow-bar{width:28px;height:1px;background:var(--red)}
+.hero-h1{
+  font-family:var(--font);font-size:clamp(3rem,9vw,7rem);font-weight:700;line-height:1.1;
+  letter-spacing:-.025em;margin-bottom:2rem;color:#fff;
+  opacity:0;animation:up 1s var(--ease) .4s forwards;
+}
+.hero-h1 em{font-style:normal;color:var(--blue)}
+.h-divider{width:56px;height:2px;background:var(--red);margin-bottom:2rem;opacity:0;animation:up .8s var(--ease) .6s forwards}
+.hero-sub{
+  font-family:var(--font-body);font-size:clamp(1rem,1.7vw,1.18rem);color:rgba(249,249,247,0.6);max-width:480px;
+  font-weight:400;line-height:1.65;margin-bottom:3rem;
+  opacity:0;animation:up .9s var(--ease) .72s forwards;
+}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:up .9s var(--ease) .88s forwards}
+.btn-dark{
+  padding:.88rem 2.4rem;background:var(--red);color:#fff;
+  font-family:var(--font);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+  border:none;border-radius:4px;cursor:pointer;transition:background .15s cubic-bezier(0,0,0.2,1),transform .2s;
+}
+.btn-dark:hover{background:#a8311f;transform:translateY(-2px);box-shadow:var(--shadow-m)}
+.btn-ghost{
+  padding:.88rem 2.4rem;border:1.5px solid var(--dark);border-radius:4px;
+  color:var(--dark);background:transparent;font-family:var(--font);
+  font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+  cursor:pointer;transition:background .15s,color .15s;
+}
+.btn-ghost:hover{background:var(--dark);color:#fff}
+.hero-scroll{
+  position:absolute;bottom:2.5rem;right:clamp(1.5rem,5vw,5rem);
+  display:flex;flex-direction:column;align-items:center;gap:.6rem;z-index:2;
+  opacity:0;animation:up .8s var(--ease) 1.1s forwards;
+}
+.scroll-label{font-family:var(--font);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(249,249,247,0.4)}
+.scroll-track{width:1px;height:48px;background:rgba(249,249,247,0.15);position:relative;overflow:hidden}
+.scroll-thumb{position:absolute;top:0;left:0;width:100%;height:100%;background:var(--red);animation:scr 2.4s ease-in-out infinite}
+
+/* STATS */
+.stats-wrap{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.stat{padding:clamp(1.5rem,3vw,2.5rem) clamp(1rem,2.5vw,2.5rem);border-right:1px solid var(--rule)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:var(--font);font-size:clamp(2rem,4vw,3rem);font-weight:700;letter-spacing:-.02em;color:var(--dark);line-height:1}
+.stat-l{font-family:var(--font-body);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+
+/* SECTION COMMONS */
+section{padding:clamp(4rem,9vw,7.5rem) clamp(1.5rem,5vw,5rem)}
+.s-ey{
+  display:inline-flex;align-items:center;gap:.75rem;
+  font-family:var(--font);font-size:.7rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:1.75rem;
+}
+.s-ey::after{content:'';width:32px;height:1px;background:var(--red);opacity:.6}
+.s-h2{font-family:var(--font);font-size:clamp(2rem,5vw,3.5rem);font-weight:700;line-height:1.1;letter-spacing:-.02em;margin-bottom:1.5rem}
+.s-h2 em{font-style:normal;color:var(--red)}
+.s-p{font-family:var(--font-body);color:var(--muted);font-size:clamp(.95rem,1.5vw,1.05rem);font-weight:400;line-height:1.65;max-width:480px}
+
+/* ABOUT */
+#about{background:var(--bg-s);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.about-g{display:grid;grid-template-columns:5fr 4fr;gap:clamp(2.5rem,6vw,7rem);align-items:start;margin-top:4rem}
+.about-vis{
+  position:relative;aspect-ratio:4/5;
+  border:1px solid var(--rule-med);background:var(--glass);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  overflow:hidden;box-shadow:var(--shadow-m);
+}
+.vis-grid{
+  position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,transparent,transparent 56px,var(--rule) 56px,var(--rule) 57px),
+    repeating-linear-gradient(90deg,transparent,transparent 56px,var(--rule) 56px,var(--rule) 57px);
+  opacity:.55;
+}
+.vis-orb{
+  position:absolute;width:70%;height:70%;
+  background:radial-gradient(circle,rgba(193,59,42,0.08),transparent 70%);
+  border-radius:50%;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  animation:breathe 7s ease-in-out infinite;
+}
+.vis-mark{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);
+  font-size:clamp(5rem,14vw,8rem);color:rgba(27,26,21,0.06);
+  font-weight:700;line-height:1;user-select:none;
+}
+.vis-cap{
+  position:absolute;bottom:0;left:0;right:0;
+  padding:1.25rem 1.5rem;
+  background:var(--glass);backdrop-filter:blur(16px);
+  border-top:1px solid var(--rule);
+}
+.vis-cap-l{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.25rem}
+.vis-cap-v{font-size:.95rem;font-weight:400;color:var(--ink)}
+.a-tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:2rem}
+.a-tag{
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
+  padding:.42rem .85rem;border:1px solid var(--rule);
+  color:var(--ink-2);background:var(--glass);backdrop-filter:blur(4px);
+  transition:all .35s var(--ease);cursor:default;
+}
+.a-tag:hover{border-color:var(--red);color:var(--red)}
+
+/* SERVICES */
+#services{background:var(--bg)}
+.svc-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;margin-bottom:4rem}
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--rule)}
+.sc{
+  padding:clamp(2rem,3.5vw,3rem);border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  position:relative;overflow:hidden;cursor:pointer;transition:background .35s;border-radius:0;
+}
+.sc:nth-child(3n){border-right:none}
+.sc::after{
+  content:'';position:absolute;bottom:0;left:0;
+  width:100%;height:3px;background:var(--red);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .35s cubic-bezier(0,0,0.2,1);
+}
+.sc:hover::after{transform:scaleX(1)}
+.sc:hover{background:rgba(193,59,42,0.03)}
+.sc-num{font-family:var(--font);font-size:.62rem;letter-spacing:.22em;color:var(--muted);margin-bottom:2rem}
+.sc-icon{font-size:1.4rem;margin-bottom:1.2rem;display:block;opacity:.4;color:var(--dark)}
+.sc-title{font-family:var(--font);font-size:clamp(1.05rem,1.8vw,1.2rem);font-weight:700;margin-bottom:.7rem;letter-spacing:-.01em;line-height:1.3}
+.sc-desc{font-family:var(--font-body);font-size:.9rem;color:var(--muted);line-height:1.65;font-weight:400}
+.sc-lnk{
+  display:inline-flex;align-items:center;gap:.4rem;
+  font-family:var(--font);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);margin-top:1.5rem;transition:color .25s,gap .25s;
+}
+.sc:hover .sc-lnk{color:var(--red);gap:.7rem}
+
+/* PORTFOLIO */
+#portfolio{background:var(--bg-s);border-top:1px solid var(--rule)}
+.port-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;margin-bottom:3.5rem}
+.port-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1px;background:var(--rule-med)}
+.pc{position:relative;overflow:hidden;background:var(--bg-s);cursor:pointer}
+.pc:nth-child(1){grid-column:span 8;grid-row:span 2}
+.pc:nth-child(2),.pc:nth-child(3){grid-column:span 4}
+.pc:nth-child(4){grid-column:span 5}
+.pc:nth-child(5){grid-column:span 7}
+.pc-in{min-height:240px;display:flex;align-items:flex-end;position:relative}
+.pc:nth-child(1) .pc-in{min-height:480px}
+.pc-bg{position:absolute;inset:0;transition:transform .8s var(--ease)}
+.pc:hover .pc-bg{transform:scale(1.04)}
+.pb1{background:linear-gradient(155deg,#0B1C1A,#163028)}
+.pb2{background:linear-gradient(155deg,#1a3a4a,#0f2535)}
+.pb3{background:linear-gradient(155deg,#3a1510,#5c1f17)}
+.pb4{background:linear-gradient(155deg,#1a2535,#0d1520)}
+.pb5{background:linear-gradient(155deg,#2a1a28,#1a0f1a)}
+.pc-sym{position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);font-size:clamp(3rem,8vw,5rem);color:rgba(249,249,247,0.12);line-height:1}
+.pc-info{
+  position:absolute;bottom:0;left:0;right:0;padding:1.5rem;
+  background:rgba(11,28,26,0.85);
+  border-top:1px solid rgba(249,249,247,.1);
+  transform:translateY(100%);transition:transform .35s var(--ease);
+}
+.pc:hover .pc-info{transform:translateY(0)}
+.pc-cat{font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:.3rem;font-family:var(--font)}
+.pc-title{font-size:clamp(.9rem,1.5vw,1.05rem);font-weight:700;color:#F9F9F7;font-family:var(--font)}
+
+/* AI SECTION — inverted */
+#ai{background:var(--dark);color:#F9F9F7}
+#ai .s-ey{color:rgba(249,249,247,.4)}
+#ai .s-ey::after{background:var(--red);opacity:.6}
+#ai .s-h2{color:#F9F9F7}
+#ai .s-h2 em{color:var(--blue)}
+#ai .s-p{color:rgba(249,249,247,.5)}
+.ai-g{display:grid;grid-template-columns:1fr 1fr;gap:clamp(3rem,7vw,8rem);align-items:center}
+.ai-vis{position:relative;aspect-ratio:1;display:flex;align-items:center;justify-content:center}
+.ring{position:absolute;border-radius:50%;border:1px solid rgba(249,249,247,.07)}
+.ring-1{width:88%;height:88%;animation:rot 18s linear infinite;border-color:rgba(193,59,42,.2)}
+.ring-2{width:62%;height:62%;animation:rot 11s linear infinite reverse;border-color:rgba(92,157,200,.2)}
+.ring-3{width:37%;height:37%;animation:rot 6s linear infinite;border-color:rgba(249,249,247,.12)}
+.ring-dot{width:5px;height:5px;background:var(--red);border-radius:50%;position:absolute;top:0;left:50%;transform:translate(-50%,-50%)}
+.ai-core{
+  width:76px;height:76px;border-radius:50%;
+  background:radial-gradient(circle,rgba(193,59,42,.15),transparent);
+  border:1.5px solid rgba(193,59,42,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;opacity:.8;animation:breathe2 4s ease-in-out infinite;
+}
+.ai-list{margin-top:2.5rem;border-top:1px solid rgba(249,249,247,.07)}
+.ai-li{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.95rem 0;border-bottom:1px solid rgba(249,249,247,.05);
+  font-family:var(--font-body);font-size:.88rem;letter-spacing:.03em;color:rgba(249,249,247,.45);
+  transition:color .25s;cursor:default;
+}
+.ai-li:hover{color:#F9F9F7}
+.ai-li-d{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;opacity:.7}
+
+/* TESTIMONIALS */
+#testi{background:var(--bg-s);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.testi-g{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);margin-top:4rem}
+.tc{background:var(--bg-s);padding:clamp(1.5rem,3vw,2.5rem);transition:background .25s}
+.tc:hover{background:#fff}
+.tc-q{font-family:var(--font);font-size:3rem;line-height:.8;color:var(--red);opacity:.3;font-weight:900;margin-bottom:1rem}
+.tc-t{font-family:var(--font-body);font-size:1rem;font-weight:400;line-height:1.65;color:var(--ink);margin-bottom:1.75rem}
+.tc-bar{width:24px;height:2px;background:var(--red);margin-bottom:1rem}
+.tc-name{font-family:var(--font);font-size:.88rem;font-weight:700;letter-spacing:.02em;color:var(--dark)}
+.tc-role{font-family:var(--font);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-top:.2rem}
+
+/* INSIGHTS */
+#insights{background:var(--bg)}
+.ins-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1.5rem;margin-bottom:4rem}
+.ins-g{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.ic{background:var(--bg);overflow:hidden;cursor:pointer;transition:background .25s}
+.ic:hover{background:#fff}
+.ic-th{height:140px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--rule);font-size:2.2rem;opacity:.22;background:var(--bg-s);transition:opacity .25s}
+.ic:hover .ic-th{opacity:.5}
+.ic-b{padding:1.5rem}
+.ic-tag{font-family:var(--font);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem}
+.ic-title{font-family:var(--font);font-size:.95rem;font-weight:700;line-height:1.4;color:var(--dark);margin-bottom:.7rem}
+.ic-meta{font-family:var(--font-body);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.ic-lnk{
+  display:flex;align-items:center;gap:.3rem;
+  font-family:var(--font);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);margin-top:.75rem;border-top:1px solid var(--rule);padding-top:.75rem;
+  transition:color .25s;
+}
+.ic:hover .ic-lnk{color:var(--red)}
+
+/* CONTACT */
+#contact{background:var(--bg-s);border-top:1px solid var(--rule)}
+.contact-g{display:grid;grid-template-columns:5fr 6fr;gap:clamp(3rem,7vw,8rem);margin-top:4rem;align-items:start}
+.c-row{display:flex;align-items:flex-start;gap:1rem;padding:1.1rem 0;border-bottom:1px solid var(--rule);font-family:var(--font-body);font-size:.9rem;color:var(--muted);font-weight:400}
+.c-row-l{font-family:var(--font);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--dark);width:60px;flex-shrink:0;padding-top:.1rem}
+.c-kol{
+  margin-top:2.5rem;padding:1.75rem;border-left:3px solid var(--red);
+  background:#fff;
+  position:relative;overflow:hidden;
+}
+.c-kol::after{
+  content:'KOL';position:absolute;bottom:-1rem;right:0;
+  font-family:var(--font);font-size:clamp(4rem,11vw,7rem);font-weight:900;
+  color:rgba(11,28,26,0.04);letter-spacing:-.04em;line-height:1;pointer-events:none;
+}
+.c-kol-l{font-family:var(--font);font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:.6rem}
+.c-kol-t{font-family:var(--font-body);font-size:.9rem;font-weight:400;color:var(--ink);line-height:1.65}
+.fg{margin-bottom:1.15rem}
+.fg label{display:block;font-family:var(--font);font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:.48rem}
+.fg input,.fg textarea,.fg select{
+  width:100%;background:#fff;
+  border:1px solid var(--rule-med);color:var(--ink);font-family:var(--font-body);font-size:1rem;
+  padding:.82rem 1rem;outline:none;border-radius:4px;transition:border-color .25s,box-shadow .25s;
+  -webkit-appearance:none;
+}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--muted)}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(193,59,42,.08)}
+.fg select option{background:#fff;color:var(--ink)}
+.fg textarea{height:110px;resize:vertical}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+/* FOOTER */
+footer{background:var(--dark);border-top:1px solid rgba(249,249,247,.08);padding:clamp(2rem,4vw,3.5rem) clamp(1.5rem,5vw,5rem)}
+.ft-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:2.5rem;padding-bottom:2rem;border-bottom:1px solid rgba(249,249,247,.08)}
+.ft-logo{font-family:var(--font);font-size:1.1rem;font-weight:700;letter-spacing:.3em;color:#fff}
+.ft-sub{font-family:var(--font);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(249,249,247,.35);margin-top:.4rem}
+.ft-cols{display:flex;gap:3.5rem;flex-wrap:wrap}
+.ft-col-l{font-family:var(--font);font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:1rem}
+.ft-col a{display:block;font-family:var(--font-body);font-size:.85rem;color:rgba(249,249,247,.5);text-decoration:none;margin-bottom:.5rem;letter-spacing:.02em;transition:color .25s}
+.ft-col a:hover{color:#fff}
+.ft-bot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;padding-top:1.5rem;font-family:var(--font);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(249,249,247,.25)}
+
+/* KEYFRAMES */
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scr{0%{transform:scaleY(0) translateY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+@keyframes breathe{0%,100%{transform:translate(-50%,-50%) scale(1)}50%{transform:translate(-50%,-50%) scale(1.1)}}
+@keyframes breathe2{0%,100%{opacity:.3}50%{opacity:.55}}
+@keyframes rot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(18px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.rev.in{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .svc-grid{grid-template-columns:repeat(2,1fr)}
+  .sc:nth-child(3n){border-right:1px solid var(--rule)}
+  .sc:nth-child(2n){border-right:none}
+  .ins-g{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:860px){
+  .about-g,.ai-g,.contact-g{grid-template-columns:1fr}
+  .about-vis{aspect-ratio:4/3;max-height:320px}
+  .ai-vis{aspect-ratio:1;max-height:260px;margin:0 auto}
+  .port-grid{grid-template-columns:1fr;background:none;gap:1px}
+  .pc:nth-child(n){grid-column:span 12;grid-row:span 1}
+  .pc-info{transform:translateY(0)}
+  .testi-g{grid-template-columns:1fr}
+  .stats-wrap{grid-template-columns:repeat(2,1fr)}
+  .stat:nth-child(2){border-right:none}
+  .stat:nth-child(3){border-top:1px solid var(--rule)}
+  .stat:nth-child(4){border-top:1px solid var(--rule)}
+}
+@media(max-width:680px){
+  .nav-links,.nav-cta{display:none}
+  .burger{display:flex}
+  nav.open .nav-links{
+    display:flex;flex-direction:column;
+    position:fixed;top:64px;left:0;right:0;gap:0;
+    background:rgba(249,249,247,0.97);backdrop-filter:blur(24px);
+    border-bottom:1px solid var(--rule);z-index:999;
+  }
+  nav.open .nav-links li{border-bottom:1px solid var(--rule)}
+  nav.open .nav-links a{display:block;padding:1rem clamp(1.5rem,5vw,5rem)}
+  nav.open .nav-cta{display:block;margin:1rem clamp(1.5rem,5vw,5rem);width:auto}
+  .h-rule-l,.h-rule-r,.hero-scroll,.cur,.cur-ring{display:none}
+  .svc-grid{grid-template-columns:1fr}
+  .sc:nth-child(n){border-right:none}
+  .ins-g{grid-template-columns:1fr}
+  .ft-cols{gap:2rem}
+  .form-row{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .stats-wrap{grid-template-columns:1fr 1fr}
+  .stat:nth-child(odd){border-right:1px solid var(--rule)}
+  .stat:nth-child(even){border-right:none}
+  .stat:nth-child(n+3){border-top:1px solid var(--rule)}
+}
+</style>
+</head>
+<body>
+
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="cr"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="logo">OCELLI</div>
+  <ul class="nav-links" id="nl">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Work</a></li>
+    <li><a href="#insights">Insights</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Book a Call</button>
+  <div class="burger" id="bg">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="nc"></canvas>
+  <div class="h-rule-l"></div>
+  <div class="h-rule-r"></div>
+  <div class="hero-body">
+    <div class="eyebrow"><div class="eyebrow-bar"></div>AI-Augmented Design Agency &nbsp;·&nbsp; Kolkata, India</div>
+    <h1 class="hero-h1">Design systems<br>that <em>think</em><br>and convert.</h1>
+    <div class="h-divider"></div>
+    <p class="hero-sub">AI-powered design for brands that refuse to be invisible. We build brand infrastructure that drives compounding growth.</p>
+    <div class="hero-btns">
+      <button class="btn-dark">Book a Strategy Call</button>
+      <button class="btn-ghost">View Our Work</button>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span class="scroll-label">Scroll</span>
+    <div class="scroll-track"><div class="scroll-thumb"></div></div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-wrap rev">
+  <div class="stat"><div class="stat-n" data-c="120">0</div><div class="stat-l">Projects Delivered</div></div>
+  <div class="stat"><div class="stat-n" data-c="45">0</div><div class="stat-l">Global Clients</div></div>
+  <div class="stat"><div class="stat-n" data-c="8">0</div><div class="stat-l">Years of Craft</div></div>
+  <div class="stat"><div class="stat-n" data-c="98">0</div><div class="stat-l">Satisfaction Rate</div></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="rev"><span class="s-ey">Our Story</span></div>
+  <div class="about-g">
+    <div>
+      <h2 class="s-h2 rev">A new generation<br>of <em>creative intelligence</em></h2>
+      <p class="s-p rev d1">Born in Kolkata's vibrant intellectual energy, built for the world. Ocelli is where human ingenuity meets artificial intelligence — a creative agency that doesn't just design for today, but architects the digital landscape of tomorrow.</p>
+      <p class="s-p rev d2" style="margin-top:1.25rem">We believe the future of creativity is not human or machine — it's both. Our multidisciplinary team blends design thinking, AI research, and strategic consulting to deliver transformative outcomes for startups, enterprises, and visionary founders.</p>
+      <div class="a-tags rev d3">
+        <div class="a-tag">Branding</div><div class="a-tag">UX / UI Design</div>
+        <div class="a-tag">AI Automation</div><div class="a-tag">Web Experiences</div>
+        <div class="a-tag">Digital Strategy</div><div class="a-tag">Motion & AI Video</div>
+      </div>
+    </div>
+    <div class="about-vis rev d2">
+      <div class="vis-grid"></div>
+      <div class="vis-orb"></div>
+      <div class="vis-mark">◎</div>
+      <div class="vis-cap">
+        <div class="vis-cap-l">Founded</div>
+        <div class="vis-cap-v">Kolkata · 2017 · Global Reach</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="svc-head">
+    <div>
+      <div class="rev"><span class="s-ey">What We Do</span></div>
+      <h2 class="s-h2 rev">Services designed<br>to <em>accelerate</em> growth</h2>
+    </div>
+    <button class="btn-ghost rev" style="align-self:flex-end">All Services ↗</button>
+  </div>
+  <div class="svc-grid">
+    <div class="sc rev"><div class="sc-num">01</div><span class="sc-icon">◈</span><div class="sc-title">AI-Powered Branding</div><div class="sc-desc">Brand systems that evolve. AI-generated visual identities, tone calibration, and adaptive guidelines built for the intelligence era.</div><div class="sc-lnk">Explore <span>→</span></div></div>
+    <div class="sc rev d1"><div class="sc-num">02</div><span class="sc-icon">⬡</span><div class="sc-title">Web & Product Design</div><div class="sc-desc">Pixel-perfect interfaces and immersive web experiences. From SaaS dashboards to luxury e-commerce — designed for conversion and delight.</div><div class="sc-lnk">Explore <span>→</span></div></div>
+    <div class="sc rev d2"><div class="sc-num">03</div><span class="sc-icon">⚡</span><div class="sc-title">Creative Automation</div><div class="sc-desc">Generative pipelines for content, design assets, and marketing collateral — scaling creativity without scaling cost.</div><div class="sc-lnk">Explore <span>→</span></div></div>
+    <div class="sc rev"><div class="sc-num">04</div><span class="sc-icon">◎</span><div class="sc-title">Motion & AI Video</div><div class="sc-desc">Cinematic motion design and AI-generated video production. Brand films, explainers, and social content that stops the scroll.</div><div class="sc-lnk">Explore <span>→</span></div></div>
+    <div class="sc rev d1"><div class="sc-num">05</div><span class="sc-icon">⬣</span><div class="sc-title">Digital Transformation</div><div class="sc-desc">End-to-end consulting that maps AI readiness, redesigns workflows, and charts your path from legacy to leading-edge.</div><div class="sc-lnk">Explore <span>→</span></div></div>
+    <div class="sc rev d2"><div class="sc-num">06</div><span class="sc-icon">◆</span><div class="sc-title">Growth & Creative Strategy</div><div class="sc-desc">Data-informed creative strategies that connect your brand to audiences who matter. From positioning to performance.</div><div class="sc-lnk">Explore <span>→</span></div></div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="port-head">
+    <div>
+      <div class="rev"><span class="s-ey">Selected Work</span></div>
+      <h2 class="s-h2 rev">Craft that<br><em>defines categories</em></h2>
+    </div>
+    <button class="btn-ghost rev" style="align-self:flex-end">All Projects ↗</button>
+  </div>
+  <div class="port-grid rev">
+    <div class="pc"><div class="pc-in"><div class="pc-bg pb1"></div><div class="pc-sym">◎</div></div><div class="pc-info"><div class="pc-cat">SaaS Dashboard</div><div class="pc-title">NeuralOps — AI Operations Platform</div></div></div>
+    <div class="pc"><div class="pc-in"><div class="pc-bg pb2"></div><div class="pc-sym">⬡</div></div><div class="pc-info"><div class="pc-cat">Luxury Branding</div><div class="pc-title">Aurum — Jewellery Identity</div></div></div>
+    <div class="pc"><div class="pc-in"><div class="pc-bg pb3"></div><div class="pc-sym">◆</div></div><div class="pc-info"><div class="pc-cat">E-commerce</div><div class="pc-title">Verse — Fashion Platform</div></div></div>
+    <div class="pc"><div class="pc-in"><div class="pc-bg pb4"></div><div class="pc-sym">⚡</div></div><div class="pc-info"><div class="pc-cat">AI Product</div><div class="pc-title">Kova — Predictive Analytics UI</div></div></div>
+    <div class="pc"><div class="pc-in"><div class="pc-bg pb5"></div><div class="pc-sym">⬣</div></div><div class="pc-info"><div class="pc-cat">Campaign</div><div class="pc-title">Meridian — Global Product Launch</div></div></div>
+  </div>
+</section>
+
+<!-- AI SECTION (inverted dark panel) -->
+<section id="ai">
+  <div class="ai-g">
+    <div>
+      <div class="rev"><span class="s-ey">AI Philosophy</span></div>
+      <h2 class="s-h2 rev">Human Creativity.<br><em>AI Amplified.</em></h2>
+      <p class="s-p rev d1">We don't use AI as a shortcut — we use it as a superpower. Our proprietary creative AI workflows augment every phase of our process, governed by our responsible AI framework ensuring creativity that's ethical and original.</p>
+      <div class="ai-list rev d2">
+        <div class="ai-li"><span>Generative Design Systems</span><div class="ai-li-d"></div></div>
+        <div class="ai-li"><span>AI Content Pipelines</span><div class="ai-li-d"></div></div>
+        <div class="ai-li"><span>Responsible AI Governance</span><div class="ai-li-d"></div></div>
+        <div class="ai-li"><span>Multimodal AI Workflows</span><div class="ai-li-d"></div></div>
+        <div class="ai-li"><span>Prompt Engineering</span><div class="ai-li-d"></div></div>
+      </div>
+    </div>
+    <div class="ai-vis rev d2">
+      <div class="ring ring-1"><div class="ring-dot"></div></div>
+      <div class="ring ring-2"><div class="ring-dot"></div></div>
+      <div class="ring ring-3"><div class="ring-dot"></div></div>
+      <div class="ai-core">◎</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testi">
+  <div class="rev"><span class="s-ey">Client Stories</span></div>
+  <h2 class="s-h2 rev">Words from<br><em>visionary founders</em></h2>
+  <div class="testi-g">
+    <div class="tc rev"><div class="tc-q">"</div><p class="tc-t">Ocelli didn't just redesign our product — they transformed how users perceive value. Our conversion rate jumped 67% in the first quarter post-launch.</p><div class="tc-bar"></div><div class="tc-name">Arjun Rathi</div><div class="tc-role">CEO, NeuralOps · Series A SaaS</div></div>
+    <div class="tc rev d1"><div class="tc-q">"</div><p class="tc-t">The most sophisticated creative team we've worked with globally. Their AI-powered brand system scaled our identity across 12 markets without losing soul.</p><div class="tc-bar"></div><div class="tc-name">Sofia Mehta</div><div class="tc-role">CMO, Aurum Luxury Group</div></div>
+    <div class="tc rev d2"><div class="tc-q">"</div><p class="tc-t">What sets Ocelli apart is strategic depth. They understood our market before we understood it ourselves. Brilliant consultants and flawless designers.</p><div class="tc-bar"></div><div class="tc-name">Karan Dasgupta</div><div class="tc-role">Founder, Verse Commerce</div></div>
+  </div>
+</section>
+
+<!-- INSIGHTS -->
+<section id="insights">
+  <div class="ins-head">
+    <div>
+      <div class="rev"><span class="s-ey">Insights</span></div>
+      <h2 class="s-h2 rev">Ideas shaping<br><em>digital futures</em></h2>
+    </div>
+    <button class="btn-ghost rev" style="align-self:flex-end">All Articles ↗</button>
+  </div>
+  <div class="ins-g">
+    <div class="ic rev"><div class="ic-th">🤖</div><div class="ic-b"><div class="ic-tag">AI Governance</div><div class="ic-title">Why Responsible AI Isn't Optional for Creative Brands</div><div class="ic-meta">7 min · May 2025</div><div class="ic-lnk">Read Article →</div></div></div>
+    <div class="ic rev d1"><div class="ic-th">⚡</div><div class="ic-b"><div class="ic-tag">Digital Modernization</div><div class="ic-title">The $4M Mistake: Why Legacy UI Still Kills Enterprise Deals</div><div class="ic-meta">5 min · Apr 2025</div><div class="ic-lnk">Read Article →</div></div></div>
+    <div class="ic rev d2"><div class="ic-th">◎</div><div class="ic-b"><div class="ic-tag">Creative Technology</div><div class="ic-title">Generative Design Systems: The Next Frontier in Brand Architecture</div><div class="ic-meta">9 min · Mar 2025</div><div class="ic-lnk">Read Article →</div></div></div>
+    <div class="ic rev d3"><div class="ic-th">🌏</div><div class="ic-b"><div class="ic-tag">Responsible AI</div><div class="ic-title">Building AI Products that India's Emerging Market Actually Trusts</div><div class="ic-meta">6 min · Feb 2025</div><div class="ic-lnk">Read Article →</div></div></div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="rev"><span class="s-ey">Let's Build</span></div>
+  <h2 class="s-h2 rev" style="max-width:520px">Start your<br><em>transformation</em> today</h2>
+  <div class="contact-g">
+    <div class="rev d1">
+      <p class="s-p" style="margin-bottom:2.5rem">Whether you're a founder with a vision or an enterprise ready to evolve — we're ready to architect your digital future from Kolkata to the world.</p>
+      <div class="c-row"><div class="c-row-l">Email</div><span>hello@ocelli.studio</span></div>
+      <div class="c-row"><div class="c-row-l">Phone</div><span>+91 98300 00000</span></div>
+      <div class="c-row"><div class="c-row-l">Address</div><span>Salt Lake, Kolkata, West Bengal 700091</span></div>
+      <div class="c-kol" style="margin-top:2rem">
+        <div class="c-kol-l">Rooted in Kolkata</div>
+        <div class="c-kol-t">The City of Joy powers our creative intuition. From the Hooghly to the horizon — we carry Kolkata's intellectual energy into every pixel we craft.</div>
+      </div>
+    </div>
+    <div class="rev d2">
+      <div class="form-row">
+        <div class="fg"><label>Name</label><input type="text" placeholder="Rahul Dasgupta"></div>
+        <div class="fg"><label>Email</label><input type="email" placeholder="rahul@company.com"></div>
+      </div>
+      <div class="fg"><label>Company</label><input type="text" placeholder="Acme Corp"></div>
+      <div class="fg"><label>Service</label>
+        <select>
+          <option value="">Select a service</option>
+          <option>AI-Powered Branding</option><option>Web & Product Design</option>
+          <option>Creative Automation</option><option>Motion & AI Video</option>
+          <option>Digital Transformation</option><option>Growth Strategy</option>
+        </select>
+      </div>
+      <div class="fg"><label>Project Brief</label><textarea placeholder="We're looking to..."></textarea></div>
+      <button class="btn-dark" style="width:100%;font-size:.78rem;letter-spacing:.18em">Send Message &nbsp;→</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="ft-top">
+    <div>
+      <div class="ft-logo">OCELLI</div>
+      <div class="ft-sub">AI-Augmented Design Agency · Kolkata</div>
+    </div>
+    <div class="ft-cols">
+      <div class="ft-col"><div class="ft-col-l">Studio</div><a href="#about">About</a><a href="#services">Services</a><a href="#portfolio">Work</a></div>
+      <div class="ft-col"><div class="ft-col-l">Resources</div><a href="#insights">Insights</a><a href="#">Case Studies</a><a href="#">Press</a></div>
+      <div class="ft-col"><div class="ft-col-l">Connect</div><a href="#">LinkedIn</a><a href="#">Instagram</a><a href="#contact">Contact</a></div>
+    </div>
+  </div>
+  <div class="ft-bot">
+    <span>© 2025 Ocelli Studio Pvt. Ltd.</span>
+    <span>Privacy Policy</span>
+    <span>All Rights Reserved</span>
+  </div>
+</footer>
+
+<script>
+// Cursor
+const C=document.getElementById('cur'),R=document.getElementById('cr');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;C.style.transform=`translate(${mx-3}px,${my-3}px)`});
+(function l(){rx+=(mx-rx-18)*.11;ry+=(my-ry-18)*.11;R.style.transform=`translate(${rx}px,${ry}px)`;requestAnimationFrame(l)})();
+document.querySelectorAll('a,button,.sc,.pc,.ic,.tc,.a-tag').forEach(el=>{
+  el.addEventListener('mouseenter',()=>R.classList.add('x'));
+  el.addEventListener('mouseleave',()=>R.classList.remove('x'));
+});
+
+// Nav
+window.addEventListener('scroll',()=>document.getElementById('nav').classList.toggle('scrolled',scrollY>40));
+document.getElementById('bg').addEventListener('click',()=>document.getElementById('nav').classList.toggle('open'));
+
+// Neural canvas
+const cv=document.getElementById('nc'),cx=cv.getContext('2d');
+let W,H,pts=[];
+const resize=()=>{W=cv.width=cv.offsetWidth;H=cv.height=cv.offsetHeight;
+  pts=[];const n=Math.min(40,~~(W*H/22000));
+  for(let i=0;i<n;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18});
+};
+const draw=()=>{
+  cx.clearRect(0,0,W,H);
+  pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1});
+  for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){
+    const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);
+    if(d<120){
+  cx.strokeStyle=`rgba(92,157,200,${(1-d/120)*.25})`;
+      cx.lineWidth=.5;cx.moveTo(pts[i].x,pts[i].y);cx.lineTo(pts[j].x,pts[j].y);cx.stroke();
+    }
+  }
+  pts.forEach(p=>{cx.beginPath();cx.arc(p.x,p.y,1.5,0,Math.PI*2);cx.fillStyle='rgba(92,157,200,0.35)';cx.fill()});
+  requestAnimationFrame(draw);
+};
+resize();draw();
+window.addEventListener('resize',resize);
+
+// Scroll reveal
+const ro=new IntersectionObserver(e=>e.forEach(n=>n.isIntersecting&&n.target.classList.add('in')),{threshold:.1});
+document.querySelectorAll('.rev').forEach(el=>ro.observe(el));
+
+// Counters
+const co=new IntersectionObserver(e=>e.forEach(n=>{
+  if(!n.isIntersecting)return;
+  const el=n.target,t=+el.dataset.c,suf=t===98?'%':'+';
+  let v=0;const id=setInterval(()=>{v+=t/55;if(v>=t){v=t;clearInterval(id)}el.textContent=~~v+suf},22);
+  co.unobserve(el);
+}),{threshold:.5});
+document.querySelectorAll('[data-c]').forEach(el=>co.observe(el));
+</script>
+</body>
+</html>
